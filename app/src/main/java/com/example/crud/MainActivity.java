@@ -1,21 +1,27 @@
 package com.example.crud;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,14 +49,14 @@ public class MainActivity extends AppCompatActivity {
     }
     public void Add(String name, String country , String state){
         CollectionReference collectionReference = firestore.collection("Country");
-        try {
-            Map<String ,Object> data = new HashMap<>();
-            data.put("name",name);
-            data.put("country",country);
-            data.put("state",state);
-            collectionReference.add(data);
-        }catch (Exception e){
-            Toast.makeText(MainActivity.this,""+e,Toast.LENGTH_LONG).show();
-        }
+        Map<String ,Object> data = new HashMap<>();
+        data.put("name",name);
+        data.put("country",country);
+        data.put("state",state);
+        collectionReference.document(name).set(data);
+        Intent intent = new Intent(MainActivity.this, ListCountry.class);
+        intent.putExtra("name",name);
+        startActivity(intent);
     }
+
 }
